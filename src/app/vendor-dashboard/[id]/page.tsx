@@ -17,7 +17,7 @@ export default async function VendorDashboard({ params }: { params: Promise<{ id
   }
 
   return (
-    <div className="flex-1 space-y-6 p-8 pt-6 max-w-7xl mx-auto">
+    <div className="flex-1 space-y-6 p-4 md:p-8 pt-6 max-w-7xl mx-auto">
       <div className="flex items-center space-x-4 mb-2">
         <div className="p-3 bg-indigo-50 rounded-xl text-indigo-600 shadow-sm border border-indigo-100">
           <Building className="h-6 w-6" />

@@ -14,6 +14,12 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<{ email: string; name?: string; user_type?: string; vendor_id?: string } | null>(null)
   const [isLoaded, setIsLoaded] = useState(false)
   const [sessionExpired, setSessionExpired] = useState(false)
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+
+  // Close mobile menu on route change
+  useEffect(() => {
+    setIsMobileMenuOpen(false)
+  }, [pathname])
 
   const isAuthPage = pathname === "/login" || pathname === "/signup"
 
@@ -103,14 +109,38 @@ export function AppShell({ children }: { children: React.ReactNode }) {
 
   return (
     <div className="flex h-screen bg-slate-50 overflow-hidden">
+      {/* Mobile Sidebar Overlay */}
+      <AnimatePresence>
+        {isMobileMenuOpen && (
+          <>
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setIsMobileMenuOpen(false)}
+              className="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-40 md:hidden"
+            />
+            <motion.div
+              initial={{ x: "-100%" }}
+              animate={{ x: 0 }}
+              exit={{ x: "-100%" }}
+              transition={{ type: "spring", bounce: 0, duration: 0.3 }}
+              className="fixed inset-y-0 left-0 w-64 bg-white shadow-2xl z-50 md:hidden flex flex-col"
+            >
+              <Sidebar user={user} />
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
+
       {/* Desktop Sidebar */}
       <div className="hidden md:flex md:flex-shrink-0">
         <Sidebar user={user} />
       </div>
 
       {/* Main Content */}
-      <div className="flex flex-col flex-1 overflow-hidden">
-        <Header />
+      <div className="flex flex-col flex-1 overflow-hidden min-w-0">
+        <Header onMenuClick={() => setIsMobileMenuOpen(true)} />
         
         <main className="flex-1 relative z-0 overflow-y-auto focus:outline-none">
           <AnimatePresence mode="wait">

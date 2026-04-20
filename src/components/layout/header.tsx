@@ -2,12 +2,12 @@
 
 import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
-import { LogOut, User as UserIcon, ChevronRight, Search, Loader2 } from "lucide-react"
+import { LogOut, User as UserIcon, ChevronRight, Search, Loader2, Menu } from "lucide-react"
 import { useEffect, useState, useRef } from "react"
 import { Notifications } from "./notifications"
 import { cn } from "@/lib/utils"
 
-export function Header() {
+export function Header({ onMenuClick }: { onMenuClick?: () => void }) {
   const pathname = usePathname()
   const router = useRouter()
   const [user, setUser] = useState<{ email: string; name?: string; user_type?: string; vendor_id?: string } | null>(null)
@@ -88,8 +88,16 @@ export function Header() {
   const breadcrumbs = getBreadcrumbs()
 
   return (
-    <header className="h-16 border-b border-slate-200 bg-white flex items-center justify-between px-6 z-10 shrink-0">
-      <div className="flex items-center gap-8">
+    <header className="h-16 border-b border-slate-200 bg-white flex items-center justify-between px-4 sm:px-6 z-10 shrink-0">
+      <div className="flex items-center gap-4 lg:gap-8">
+        {/* Mobile menu button */}
+        <button
+          type="button"
+          className="md:hidden p-2 -ml-2 text-slate-500 hover:bg-slate-100 rounded-md transition-colors"
+          onClick={onMenuClick}
+        >
+          <Menu className="w-5 h-5" />
+        </button>
         {/* Breadcrumbs - hidden for vendors */}
         {!isVendor && (
           <nav className="hidden lg:flex items-center gap-2 text-sm font-medium">

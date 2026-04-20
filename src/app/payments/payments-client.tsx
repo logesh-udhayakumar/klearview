@@ -290,7 +290,7 @@ export function PaymentsClient({ initialPayments, approvedVendors }: PaymentsCli
   }
 
   return (
-    <div className="flex-1 space-y-6 p-8 pt-6">
+    <div className="flex-1 space-y-6 p-4 md:p-8 pt-6 min-w-0">
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
         <div>
           <h2 className="text-3xl font-bold tracking-tight text-slate-900">Payment Portal</h2>
@@ -321,84 +321,90 @@ export function PaymentsClient({ initialPayments, approvedVendors }: PaymentsCli
 
       {activeTab === "REPORTS" && (
         <div className="space-y-4 animate-in fade-in slide-in-from-bottom-2 duration-300">
-          <div className="flex flex-col sm:flex-row gap-4 items-center justify-between">
-            <div className="relative w-full sm:w-[350px]">
-              <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                <Search className="w-4 h-4 text-slate-400" />
+          <div className="flex flex-col xl:flex-row gap-4 items-start xl:items-center justify-between">
+            {/* Search and Filters */}
+            <div className="flex flex-col sm:flex-row gap-3 w-full xl:w-auto">
+              <div className="relative w-full sm:w-[300px]">
+                <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                  <Search className="w-4 h-4 text-slate-400" />
+                </div>
+                <input
+                  type="text"
+                  className="w-full bg-white border border-slate-200 text-slate-900 text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block pl-10 p-2.5 shadow-sm transition-colors"
+                  placeholder="Search vendor name, Payment ID, Invoice..."
+                  value={search}
+                  onChange={(e) => {
+                    setSearch(e.target.value)
+                    setCurrentPage(1)
+                  }}
+                />
               </div>
-              <input
-                type="text"
-                className="w-full bg-white border border-slate-200 text-slate-900 text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block pl-10 p-2.5 shadow-sm transition-colors"
-                placeholder="Search vendor name, Payment ID, Invoice..."
-                value={search}
-                onChange={(e) => {
-                  setSearch(e.target.value)
-                  setCurrentPage(1)
-                }}
-              />
-            </div>
-            <button
-              className={cn(
-                "flex items-center gap-2 border border-slate-200 px-3 py-2.5 rounded-lg text-sm font-medium shadow-sm transition-colors",
-                showFilters ? "bg-indigo-50 text-indigo-700 border-indigo-200" : "bg-white text-slate-700 hover:bg-slate-50"
-              )}
-              onClick={() => setShowFilters(!showFilters)}
-            >
-              <Filter className="w-4 h-4" />
-              Filters
-              {(filterStatus !== "ALL" || startDate || endDate) && (
-                <span className="flex h-2 w-2 rounded-full bg-indigo-600"></span>
-              )}
-            </button>
-
-            <div className="flex items-center gap-3 bg-white p-2 border border-slate-200 rounded-lg shadow-sm w-full sm:w-auto overflow-x-auto shrink-0">
-              <span className="text-sm font-medium text-slate-600 pl-2 whitespace-nowrap">Bulk Update:</span>
-              <select
-                title="Bulk ID"
-                value={selectedBulkId}
-                onChange={(e) => setSelectedBulkId(e.target.value)}
-                className="bg-slate-50 border border-slate-200 text-slate-700 text-sm rounded-md py-1.5 px-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none"
-              >
-                <option value="">Select Bulk ID</option>
-                {uniqueBulkIds.map(id => (
-                  <option key={id} value={id}>{id}</option>
-                ))}
-              </select>
-              <select
-                title="Status"
-                value={selectedBulkStatus}
-                onChange={(e) => setSelectedBulkStatus(e.target.value)}
-                className="bg-slate-50 border border-slate-200 text-slate-700 text-sm rounded-md py-1.5 px-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none"
-              >
-                <option value="">Select Status</option>
-                <option value="COMPLETED">Completed</option>
-                <option value="FAILED">Failed</option>
-              </select>
               <button
-                disabled={!selectedBulkId || !selectedBulkStatus || isUpdatingBulk}
-                onClick={handleBulkUpdate}
-                className="bg-indigo-600 hover:bg-indigo-700 text-white px-3 py-1.5 rounded-md text-sm font-medium disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                className={cn(
+                  "flex items-center justify-center sm:justify-start gap-2 border border-slate-200 px-4 py-2.5 rounded-lg text-sm font-medium shadow-sm transition-colors shrink-0",
+                  showFilters ? "bg-indigo-50 text-indigo-700 border-indigo-200" : "bg-white text-slate-700 hover:bg-slate-50"
+                )}
+                onClick={() => setShowFilters(!showFilters)}
               >
-                {isUpdatingBulk ? "Updating..." : "Update"}
+                <Filter className="w-4 h-4" />
+                Filters
+                {(filterStatus !== "ALL" || startDate || endDate) && (
+                  <span className="flex h-1.5 w-1.5 rounded-full bg-indigo-600"></span>
+                )}
               </button>
             </div>
 
-            <button
-              className="flex items-center gap-2 bg-white border border-slate-200 text-slate-700 hover:bg-slate-50 px-4 py-2.5 rounded-lg text-sm font-medium shadow-sm transition-colors ml-auto shrink-0"
-              onClick={handleExport}
-            >
-              <Download className="w-4 h-4" />
-              Export Actions
-            </button>
+            {/* Bulk Actions and Export */}
+            <div className="flex flex-col lg:flex-row gap-3 w-full xl:w-auto items-stretch lg:items-center">
+              <div className="flex items-center gap-2 bg-white p-2 border border-slate-200 rounded-lg shadow-sm w-full lg:w-auto overflow-x-auto hide-scrollbar">
+                <span className="text-xs sm:text-sm font-medium text-slate-600 pl-1 sm:pl-2 whitespace-nowrap">Bulk Update:</span>
+                <select
+                  title="Bulk ID"
+                  value={selectedBulkId}
+                  onChange={(e) => setSelectedBulkId(e.target.value)}
+                  className="bg-slate-50 border border-slate-200 text-slate-700 text-xs sm:text-sm rounded-md py-1.5 px-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none min-w-[120px]"
+                >
+                  <option value="">Select Bulk ID</option>
+                  {uniqueBulkIds.map(id => (
+                    <option key={id} value={id}>{id}</option>
+                  ))}
+                </select>
+                <select
+                  title="Status"
+                  value={selectedBulkStatus}
+                  onChange={(e) => setSelectedBulkStatus(e.target.value)}
+                  className="bg-slate-50 border border-slate-200 text-slate-700 text-xs sm:text-sm rounded-md py-1.5 px-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none min-w-[110px]"
+                >
+                  <option value="">Select Status</option>
+                  <option value="COMPLETED">Completed</option>
+                  <option value="FAILED">Failed</option>
+                </select>
+                <button
+                  disabled={!selectedBulkId || !selectedBulkStatus || isUpdatingBulk}
+                  onClick={handleBulkUpdate}
+                  className="bg-indigo-600 hover:bg-indigo-700 text-white px-3 py-1.5 rounded-md text-xs sm:text-sm font-medium disabled:opacity-50 disabled:cursor-not-allowed transition-colors shrink-0"
+                >
+                  {isUpdatingBulk ? "Updating..." : "Update"}
+                </button>
+              </div>
+
+              <button
+                className="flex items-center justify-center lg:justify-start gap-2 bg-white border border-slate-200 text-slate-700 hover:bg-slate-50 px-4 py-2.5 rounded-lg text-sm font-medium shadow-sm transition-colors shrink-0"
+                onClick={handleExport}
+              >
+                <Download className="w-4 h-4" />
+                Export Actions
+              </button>
+            </div>
           </div>
 
           {/* Filters Panel */}
           {showFilters && (
             <div className="bg-white p-4 rounded-lg border border-slate-200 shadow-sm flex flex-col md:flex-row gap-4 animate-in fade-in slide-in-from-top-2">
-              <div className="space-y-1">
+              <div className="space-y-1 w-full md:w-auto">
                 <label className="text-xs font-semibold text-slate-500 uppercase flex items-center gap-1"><Filter className="w-3 h-3" /> Status</label>
                 <select
-                  className="bg-slate-50 border border-slate-200 text-slate-700 text-sm rounded-md py-2 px-3 outline-none min-w-[150px]"
+                  className="w-full bg-slate-50 border border-slate-200 text-slate-700 text-sm rounded-md py-2 px-3 outline-none"
                   value={filterStatus}
                   onChange={(e) => { setFilterStatus(e.target.value); setCurrentPage(1); }}
                 >
@@ -409,26 +415,26 @@ export function PaymentsClient({ initialPayments, approvedVendors }: PaymentsCli
                 </select>
               </div>
 
-              <div className="space-y-1">
-                <label className="text-xs font-semibold text-slate-500 uppercase flex items-center gap-1"><Calendar className="w-3 h-3" /> Date Range (Created At)</label>
-                <div className="flex items-center gap-2">
+              <div className="space-y-1 w-full md:w-auto">
+                <label className="text-xs font-semibold text-slate-500 uppercase flex items-center gap-1"><Calendar className="w-3 h-3" /> Date Range</label>
+                <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
                   <input
                     type="date"
-                    className="bg-slate-50 border border-slate-200 text-slate-700 text-sm rounded-md py-2 px-3 outline-none"
+                    className="w-full sm:w-auto bg-slate-50 border border-slate-200 text-slate-700 text-sm rounded-md py-2 px-3 outline-none"
                     value={startDate}
                     onChange={(e) => { setStartDate(e.target.value); setCurrentPage(1); }}
                   />
-                  <span className="text-slate-400">to</span>
+                  <span className="text-slate-400 text-center sm:text-left">to</span>
                   <input
                     type="date"
-                    className="bg-slate-50 border border-slate-200 text-slate-700 text-sm rounded-md py-2 px-3 outline-none"
+                    className="w-full sm:w-auto bg-slate-50 border border-slate-200 text-slate-700 text-sm rounded-md py-2 px-3 outline-none"
                     value={endDate}
                     onChange={(e) => { setEndDate(e.target.value); setCurrentPage(1); }}
                   />
                 </div>
               </div>
 
-              <div className="md:ml-auto flex items-end">
+              <div className="md:ml-auto flex items-end justify-end mt-2 md:mt-0">
                 <button
                   onClick={() => {
                     setFilterStatus("ALL");
@@ -437,7 +443,7 @@ export function PaymentsClient({ initialPayments, approvedVendors }: PaymentsCli
                     setSearch("");
                     setCurrentPage(1);
                   }}
-                  className="text-sm font-medium text-slate-500 hover:text-slate-800 underline underline-offset-2 px-2 py-2"
+                  className="text-sm font-medium text-slate-500 hover:text-slate-800 underline underline-offset-2 py-2"
                 >
                   Clear Filters
                 </button>
@@ -772,7 +778,7 @@ export function PaymentsClient({ initialPayments, approvedVendors }: PaymentsCli
               </div>
 
               {draftPayments.length > 0 && (
-                <div className="p-4 border-t border-slate-100 bg-slate-50 flex justify-between items-center">
+                <div className="p-4 border-t border-slate-100 bg-slate-50 flex flex-col sm:flex-row gap-4 justify-between items-start sm:items-center">
                   <div className="text-sm text-slate-600 font-medium">
                     Total Amount: ₹<span className="text-slate-900 text-base ml-1">
                       {isCommonAmount
@@ -785,7 +791,7 @@ export function PaymentsClient({ initialPayments, approvedVendors }: PaymentsCli
                   <button
                     onClick={submitPayments}
                     disabled={isSubmitting}
-                    className="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-2.5 rounded-lg text-sm font-medium transition-all shadow-sm shadow-indigo-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+                    className="w-full sm:w-auto justify-center bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-2.5 rounded-lg text-sm font-medium transition-all shadow-sm shadow-indigo-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
                   >
                     {isSubmitting ? (
                       <>

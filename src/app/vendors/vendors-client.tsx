@@ -120,8 +120,8 @@ export function VendorsClient({ initialVendors }: VendorsClientProps) {
   }
 
   return (
-    <div className="flex-1 space-y-6 p-8 pt-6">
-      <div className="flex items-center justify-between">
+    <div className="flex-1 space-y-6 p-4 md:p-8 pt-6">
+      <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
         <div>
           <h2 className="text-3xl font-bold tracking-tight text-slate-900">Vendor Details</h2>
           <p className="text-slate-500 mt-1 cursor-default">Manage and monitor vendor profiles</p>

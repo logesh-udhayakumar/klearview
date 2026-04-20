@@ -20,7 +20,7 @@ export function DashboardClient({ vendors, auditLogs, chartData }: DashboardClie
   }
 
   return (
-    <div className="flex-1 space-y-8 p-8 pt-6">
+    <div className="flex-1 space-y-8 p-4 md:p-8 pt-6">
       <div className="flex items-center justify-between space-y-2">
         <div>
           <h2 className="text-3xl font-bold tracking-tight text-slate-900">Analytics Hub</h2>
@@ -89,7 +89,7 @@ export function DashboardClient({ vendors, auditLogs, chartData }: DashboardClie
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-7">
 
         {/* Compliance Health Chart */}
-        <Card className="col-span-4 hover:shadow-md transition-shadow">
+        <Card className="md:col-span-2 lg:col-span-4 hover:shadow-md transition-shadow">
           <CardHeader>
             <CardTitle className="flex items-center text-lg">
               <Activity className="mr-2 h-5 w-5 text-indigo-500" />
@@ -185,7 +185,7 @@ export function DashboardClient({ vendors, auditLogs, chartData }: DashboardClie
         </Card>
 
         {/* Recent Activity Feed */}
-        <Card className="col-span-3 hover:shadow-md transition-shadow">
+        <Card className="md:col-span-2 lg:col-span-3 hover:shadow-md transition-shadow">
           <CardHeader>
             <CardTitle className="text-lg">Audit Events Timeline</CardTitle>
           </CardHeader>
